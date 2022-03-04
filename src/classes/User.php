@@ -27,4 +27,7 @@ class User extends DB
         return "You are already registered! Please Login";
     }
     }
+    public function addUserByAdmin(){
+        DB::getInstance()->exec("INSERT INTO Users(username,`password`,email,`Status`,firstName,lastname,`role`) VALUES('$this->username','$this->password','$this->email','approved','$this->firstname','$this->lastname','user');");
+    }
 }
