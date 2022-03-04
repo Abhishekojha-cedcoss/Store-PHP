@@ -10,7 +10,6 @@ $(function () {
     });
 });
 
-    $("body").on("click", ".#Update", function (e) {
-      e.preventDefault();
-    });
-
+$("body").on("click", ".#Update", function (e) {
+    e.preventDefault();
+});
