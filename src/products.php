@@ -161,35 +161,28 @@
           <a class="btn btn-success" href="add-product.html">Add Product</a>
         </div>
       </form>
+
+      <br>
       <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td><a href="#">Edit</a>&nbsp;<a href="#">Delete</a></td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td><a href="#">Edit</a>&nbsp;<a href="#">Delete</a></td>
-            </tr>
+          <?php
+          $html = "";
+          $html .= '<table class="table table-striped table-sm">     
+        <tr>
+          <th scope="col">Product Id</th>
+          <th scope="col">Product name</th>
+          <th scope="col">Product Category ID</th>
+          <th scope="col">Product Sales Price</th>
+          <th scope="col">Product List Price</th>
+          <th scope="col">Action</th>
+        </tr>
+      ';
+      $html.='</table>';
+      echo $html;
+      ?>
+
           </tbody>
         </table>
-        <nav aria-label="Page navigation example">
+        <!-- <nav aria-label="Page navigation example">
             <ul class="pagination">
               <li class="page-item"><a class="page-link" href="#">Previous</a></li>
               <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -197,7 +190,7 @@
               <li class="page-item"><a class="page-link" href="#">3</a></li>
               <li class="page-item"><a class="page-link" href="#">Next</a></li>
             </ul>
-          </nav>
+          </nav> -->
       </div>
     </main>
   </div>
