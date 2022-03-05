@@ -1,3 +1,33 @@
+<?php
+session_start();
+include "config.php";
+include "classes/DB.php";
+
+if(isset($_POST["submit1"])){
+    $pid=$_POST["edit1"];
+    $pname=$_POST["edit2"];
+    $pCat=$_POST["edit3"];
+    $psale=$_POST["edit4"];
+    $plist=$_POST["edit5"];
+
+}
+if(isset($_POST["update"])){
+    $pid=$_POST["prodID"];
+    $pname=$_POST["pname"];
+    $psale=$_POST["sale"];
+    $plist=$_POST["list"];
+    try{
+    $stmt = DB::getInstance()->prepare("UPDATE Products SET product_name='$pname',sales_price='$psale',list_price='$plist' WHERE product_id='$pid';");
+    $stmt->execute();
+    header("location: products.php");
+    }
+    catch(Exception $e){
+        header("location:updateProduct.php");
+    }
+}
+
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -46,7 +76,7 @@
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="#">Sign out</a>
+      <a class="nav-link px-3" href="signout.php">Sign out</a>
     </div>
   </div>
 </header>
@@ -57,7 +87,7 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="dashboard.html">
+            <a class="nav-link active" aria-current="page" href="dashboard.php">
               <span data-feather="home"></span>
               Dashboard
             </a>
@@ -69,7 +99,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="products.php">
               <span data-feather="shopping-cart"></span>
               Products
             </a>
@@ -98,7 +128,7 @@
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Add Product</h1>
+        <h1 class="h2">Update Product</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -110,49 +140,50 @@
           </button>
         </div>
       </div>
+       
 
-      <form class="row g-3">
+      <form class="row g-3" action="updateProduct.php" method="POST">
         <div class="col-md-6">
-          <label for="inputEmail4" class="form-label">Email</label>
-          <input type="email" class="form-control" id="inputEmail4">
-        </div>
-        <div class="col-md-6">
-          <label for="inputPassword4" class="form-label">Password</label>
-          <input type="password" class="form-control" id="inputPassword4">
-        </div>
-        <div class="col-12">
-          <label for="inputAddress" class="form-label">Address</label>
-          <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-        </div>
-        <div class="col-12">
-          <label for="inputAddress2" class="form-label">Address 2</label>
-          <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+          <label for="prodID" class="form-label">Product_ID</label>
+          <input type="text" disabled class="form-control" id="prodID" value="<?php echo $pid; ?>">
         </div>
         <div class="col-md-6">
-          <label for="inputCity" class="form-label">City</label>
-          <input type="text" class="form-control" id="inputCity">
+          <input type="hidden" class="form-control" name="prodID" value="<?php echo $pid; ?>">
         </div>
+        <div class="col-md-6">
+          <label for="pname" class="form-label">Product Name</label>
+          <input type="text" class="form-control" id="pname" name="pname" required value="<?php echo $pname; ?>">
+        </div>
+        <div class="col-md-6">
+          <label for="sale" class="form-label">Sales Price</label>
+          <input type="text" class="form-control" id="sale" name="sale" required value="<?php echo $psale; ?>">
+        </div>
+        <div class="col-md-6">
+          <label for="list" class="form-label">List Price</label>
+          <input type="text" class="form-control" id="list" name="list" required value="<?php echo $plist; ?>">
+        </div>
+
+
         <div class="col-md-4">
-          <label for="inputState" class="form-label">State</label>
-          <select id="inputState" class="form-select">
+          <label for="prodCat" class="form-label">Product Category</label>
+          <select id="prodCat" class="form-select" name="prodCat" >
             <option selected>Choose...</option>
-            <option>...</option>
-          </select>
+            <?php 
+            $stmt = DB::getInstance()->prepare("SELECT * FROM Product_category");
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $html="";
+            foreach($stmt->fetchAll() as $k=>$v){
+              $html.='<option>'.$v["category_name"].'</option>';
+            }
+            $html.='</select>';
+            echo $html;
+            ?>
+          
         </div>
-        <div class="col-md-2">
-          <label for="inputZip" class="form-label">Zip</label>
-          <input type="text" class="form-control" id="inputZip">
-        </div>
+
         <div class="col-12">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
-              Check me out
-            </label>
-          </div>
-        </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Add Product</button>
+          <button type="submit" class="btn btn-primary" name="update">Update Product</button>
         </div>
       </form>      
     </main>

@@ -1,3 +1,9 @@
+<?php
+session_start();
+include "config.php";
+include "classes/DB.php";
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -46,7 +52,7 @@
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="#">Sign out</a>
+      <a class="nav-link px-3" href="signout.php">Sign out</a>
     </div>
   </div>
 </header>
@@ -57,7 +63,7 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="dashboard.html">
+            <a class="nav-link active" aria-current="page" href="dashboard.php">
               <span data-feather="home"></span>
               Dashboard
             </a>
@@ -93,45 +99,12 @@
             </a>
           </li>
         </ul>
-
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Saved reports</span>
-          <a class="link-secondary" href="#" aria-label="Add a new report">
-            <span data-feather="plus-circle"></span>
-          </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Current month
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Last quarter
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Social engagement
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Year-end sale
-            </a>
-          </li>
-        </ul>
       </div>
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Products</h1>
+        <h1 class="h2">Add Product</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -144,61 +117,48 @@
         </div>
       </div>
 
-      <form class="row row-cols-lg-auto g-3 align-items-center">
-        <div class="col-12">
-          <label class="visually-hidden" for="inlineFormInputGroupUsername">Search</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Enter id,name...">
-          </div>
+      <form class="row g-3" action="products.php" method="POST">
+        <div class="col-md-6">
+          <label for="prodID" class="form-label">Product_ID</label>
+          <input type="text" class="form-control" id="prodID" name="prodID" required>
         </div>
-      
-        
-      
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Search</button>
+        <div class="col-md-6">
+          <label for="pname" class="form-label">Product Name</label>
+          <input type="text" class="form-control" id="pname" name="pname" required>
         </div>
-        <div class="col-12">
-          <a class="btn btn-success" href="add-product.html">Add Product</a>
+        <div class="col-md-6">
+          <label for="sale" class="form-label">Sales Price</label>
+          <input type="text" class="form-control" id="sale" name="sale" required >
         </div>
-      </form>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">ID</th>
-              <th scope="col">Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td><a href="#">Edit</a>&nbsp;<a href="#">Delete</a></td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td><a href="#">Edit</a>&nbsp;<a href="#">Delete</a></td>
-            </tr>
-          </tbody>
-        </table>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-          </nav>
-      </div>
+        <div class="col-md-6">
+          <label for="list" class="form-label">List Price</label>
+          <input type="text" class="form-control" id="list" name="list" required>
+        </div>
+
+
+        <div class="col-md-4">
+          <label for="prodCat" class="form-label">Product Category</label>
+          <select id="prodCat" class="form-select" name="prodCat" >
+            <option selected>Choose...</option>
+            <?php 
+            $stmt = DB::getInstance()->prepare("SELECT * FROM Product_category");
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $html="";
+            foreach($stmt->fetchAll() as $k=>$v){
+              $html.='<option>'.$v["category_name"].'</option>';
+            }
+            $html.='</select>';
+            echo $html;
+
+            ?>
+          
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary" name="add">Add Product</button>
+        </div>
+      </form>      
     </main>
   </div>
 </div>
