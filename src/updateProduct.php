@@ -3,6 +3,30 @@ session_start();
 include "config.php";
 include "classes/DB.php";
 
+if(isset($_POST["submit1"])){
+    $pid=$_POST["edit1"];
+    $pname=$_POST["edit2"];
+    $pCat=$_POST["edit3"];
+    $psale=$_POST["edit4"];
+    $plist=$_POST["edit5"];
+
+}
+if(isset($_POST["update"])){
+    $pid=$_POST["prodID"];
+    $pname=$_POST["pname"];
+    $psale=$_POST["sale"];
+    $plist=$_POST["list"];
+    try{
+    $stmt = DB::getInstance()->prepare("UPDATE Products SET product_name='$pname',sales_price='$psale',list_price='$plist' WHERE product_id='$pid';");
+    $stmt->execute();
+    header("location: products.php");
+    }
+    catch(Exception $e){
+        header("location:updateProduct.php");
+    }
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -75,7 +99,7 @@ include "classes/DB.php";
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="products.php">
               <span data-feather="shopping-cart"></span>
               Products
             </a>
@@ -104,7 +128,7 @@ include "classes/DB.php";
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Add Product</h1>
+        <h1 class="h2">Update Product</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -116,23 +140,27 @@ include "classes/DB.php";
           </button>
         </div>
       </div>
+       
 
-      <form class="row g-3" action="products.php" method="POST">
+      <form class="row g-3" action="updateProduct.php" method="POST">
         <div class="col-md-6">
           <label for="prodID" class="form-label">Product_ID</label>
-          <input type="text" class="form-control" id="prodID" name="prodID" required>
+          <input type="text" disabled class="form-control" id="prodID" value="<?php echo $pid; ?>">
+        </div>
+        <div class="col-md-6">
+          <input type="hidden" class="form-control" name="prodID" value="<?php echo $pid; ?>">
         </div>
         <div class="col-md-6">
           <label for="pname" class="form-label">Product Name</label>
-          <input type="text" class="form-control" id="pname" name="pname" required>
+          <input type="text" class="form-control" id="pname" name="pname" required value="<?php echo $pname; ?>">
         </div>
         <div class="col-md-6">
           <label for="sale" class="form-label">Sales Price</label>
-          <input type="text" class="form-control" id="sale" name="sale" required >
+          <input type="text" class="form-control" id="sale" name="sale" required value="<?php echo $psale; ?>">
         </div>
         <div class="col-md-6">
           <label for="list" class="form-label">List Price</label>
-          <input type="text" class="form-control" id="list" name="list" required>
+          <input type="text" class="form-control" id="list" name="list" required value="<?php echo $plist; ?>">
         </div>
 
 
@@ -150,13 +178,12 @@ include "classes/DB.php";
             }
             $html.='</select>';
             echo $html;
-
             ?>
           
         </div>
 
         <div class="col-12">
-          <button type="submit" class="btn btn-primary" name="add">Add Product</button>
+          <button type="submit" class="btn btn-primary" name="update">Update Product</button>
         </div>
       </form>      
     </main>
