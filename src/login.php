@@ -27,6 +27,8 @@ if(isset($_POST['submit'])){
               else{
                 $result="You are not approved";
                 session_unset();
+                session_abort();
+                session_destroy();
               }    
             }
     }
