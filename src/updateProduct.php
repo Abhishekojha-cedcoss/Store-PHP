@@ -3,7 +3,7 @@ session_start();
 include "config.php";
 include "classes/DB.php";
 
-if(isset($_POST["submit1"])){
+if (isset($_POST["submit1"])) {
     $pid=$_POST["edit1"];
     $pname=$_POST["edit2"];
     $pCat=$_POST["edit3"];
@@ -11,17 +11,18 @@ if(isset($_POST["submit1"])){
     $plist=$_POST["edit5"];
 
 }
-if(isset($_POST["update"])){
+if (isset($_POST["update"])) {
     $pid=$_POST["prodID"];
     $pname=$_POST["pname"];
     $psale=$_POST["sale"];
     $plist=$_POST["list"];
-    try{
-    $stmt = DB::getInstance()->prepare("UPDATE Products SET product_name='$pname',sales_price='$psale',list_price='$plist' WHERE product_id='$pid';");
-    $stmt->execute();
-    header("location: products.php");
-    }
-    catch(Exception $e){
+    try {
+        $stmt = user\DB::getInstance()->prepare("UPDATE Products SET 
+        product_name='$pname',sales_price='$psale',list_price='$plist' 
+        WHERE product_id='$pid';");
+        $stmt->execute();
+        header("location: products.php");
+    } catch (Exception $e) {
         header("location:updateProduct.php");
     }
 }
@@ -70,7 +71,9 @@ if(isset($_POST["update"])){
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" 
+  data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" 
+  aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
@@ -127,7 +130,8 @@ if(isset($_POST["update"])){
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center 
+      pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Update Product</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
@@ -168,13 +172,13 @@ if(isset($_POST["update"])){
           <label for="prodCat" class="form-label">Product Category</label>
           <select id="prodCat" class="form-select" name="prodCat" >
             <option selected>Choose...</option>
-            <?php 
-            $stmt = DB::getInstance()->prepare("SELECT * FROM Product_category");
+            <?php
+            $stmt = user\DB::getInstance()->prepare("SELECT * FROM Product_category");
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $html="";
-            foreach($stmt->fetchAll() as $k=>$v){
-              $html.='<option>'.$v["category_name"].'</option>';
+            foreach ($stmt->fetchAll() as $k => $v) {
+                $html.='<option>'.$v["category_name"].'</option>';
             }
             $html.='</select>';
             echo $html;
@@ -191,6 +195,8 @@ if(isset($_POST["update"])){
 </div>
 
 
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js" 
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+    crossorigin="anonymous"></script>
   </body>
 </html>

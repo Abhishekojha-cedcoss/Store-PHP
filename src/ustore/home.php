@@ -4,41 +4,40 @@ include "../config.php";
 include "../classes/DB.php";
 session_start();
 
-if (!isset($_POST["search"])){
-  $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE Products.category_ID=Product_category.category_id");
-  $stmt->execute();
-  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-}
-
-else{
-  $input=$_POST["input"];
-  $sel=$_POST["select"];
-  if(!empty($input)&& !empty($sel)){
-    $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
-    WHERE Products.category_ID=Product_category.category_id 
-    AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE '$input%' OR  Product_category.category_name LIKE '$input%')
+if (!isset($_POST["search"])) {
+    $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
+    Products.category_ID=Product_category.category_id");
+    $stmt->execute();
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+} else {
+    $input=$_POST["input"];
+    $sel=$_POST["select"];
+    if (!empty($input)&& !empty($sel)) {
+        $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        WHERE Products.category_ID=Product_category.category_id 
+        AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE 
+        '$input%' OR  Product_category.category_name LIKE '$input%')
     ORDER BY $sel");
-    $stmt->execute();
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-  }
-  elseif(empty($input) && !empty($sel)){
-
-      $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE Products.category_ID=Product_category.category_id ORDER BY $sel");
-      $stmt->execute();
-      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    } elseif (empty($input) && !empty($sel)) {
+        $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        WHERE Products.category_ID=Product_category.category_id ORDER BY $sel");
+        $stmt->execute();
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    } elseif (empty($sel) && !empty($input)) {
+          $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+          WHERE Products.category_ID=Product_category.category_id 
+          AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE 
+          '$input%' OR  Product_category.category_name LIKE '$input%')");
+          $stmt->execute();
+          $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    } else {
+        $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        WHERE Products.category_ID=Product_category.category_id");
+        $stmt->execute();
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     }
-  elseif(empty($sel) && !empty($input)){
-      $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
-      WHERE Products.category_ID=Product_category.category_id 
-      AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE '$input%' OR  Product_category.category_name LIKE '$input%')");
-      $stmt->execute();
-      $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-  }
-  else{
-    $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE Products.category_ID=Product_category.category_id");
-    $stmt->execute();
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-  }
 
 }
 ?>
@@ -52,7 +51,8 @@ else{
     
 
     <!-- Bootstrap core CSS -->
-    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
 
     <style>
@@ -97,10 +97,15 @@ else{
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container">
       <a href="#" class="navbar-brand d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" 
+        stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" 
+        viewBox="0 0 24 24">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/></svg>
         <strong>Shop</strong>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" 
+      aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
     </div>
@@ -113,7 +118,8 @@ else{
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">My Shop</h1>
-        <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+        <p class="lead text-muted">Something short and leading about the collection below—its contents, 
+          the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
         <p>
           <a href="#" class="btn btn-primary my-2">Shop Now</a>
           <a href="cart.php" class="btn btn-secondary my-2">View Cart</a>
@@ -128,7 +134,8 @@ else{
             <div class="col-lg-6 col-12">
               <label class="visually-hidden" for="inlineFormInputGroupUsername">Search</label>
               <div class="input-group">
-                <input type="text" class="form-control" id="inlineFormInputGroupUsername" name="input" placeholder="Product, SKU, Category">
+                <input type="text" class="form-control" id="inlineFormInputGroupUsername" name="input" 
+                placeholder="Product, SKU, Category">
               </div>
             </div>
           
@@ -150,10 +157,10 @@ else{
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         
-                  <?php
-          $html="";
-          foreach($stmt->fetchAll() as $k=>$v){
-            $html.='
+                    <?php
+                                    $html="";
+                    foreach ($stmt->fetchAll() as $k => $v) {
+                        $html.='
             <div class="col">
             <div class="card shadow-sm">
             <img src="../images/'.$v["image"].'" alt="">
@@ -162,7 +169,8 @@ else{
             <h5>'.$v["product_name"].'</h5>
             <p class="card-text">'.$v["category_name"].'</p>
             <div class="d-flex justify-content-between align-items-center">
-              <p><strong>$'.$v["sales_price"].'</strong>&nbsp;<del><small class="link-danger">$'.$v["list_price"].'</small></del></p>
+              <p><strong>$'.$v["sales_price"].'</strong>&nbsp;<del><small 
+              class="link-danger">$'.$v["list_price"].'</small></del></p>
               <form action="single-product.php" method="POST">
               <input type="hidden" name="id" value="'.$v["product_id"].'">
               <input class="btn btn-success" type="submit" name="submit" value="View Details">
@@ -175,10 +183,10 @@ else{
           </div>
         </div>
       </div>';
-          }
-          echo $html;
+                    }
+                    echo $html;
           
-          ?>
+                    ?>
              
           </div>
           <div class="row align-items-center">
@@ -210,7 +218,9 @@ else{
 </footer>
 
 
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+    crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="script1.js"></script>
       
