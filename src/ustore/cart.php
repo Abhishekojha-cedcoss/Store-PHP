@@ -1,65 +1,66 @@
 <?php
-
 include "../config.php";
 include "../classes/DB.php";
 session_start();
 if (isset($_POST["add-to-cart"])) {
-	$id = $_POST["id"];	
-  if (!isset($_SESSION["cart"])) {
-    $_SESSION["cart"] = array();
-  }
-		if(is_array($_SESSION["cart"])){
-      if(!ispresent($id)){
-        addToCart($id);
+    $id = $_POST["id"];
+    if (!isset($_SESSION["cart"])) {
+        $_SESSION["cart"] = array();
     }
-	}
+    if (is_array($_SESSION["cart"])) {
+        if (!ispresent($id)) {
+            addToCart($id);
+        }
+    }
 }
 if (isset($_POST["delete"])) {
-  $id=$_POST["pid"];
-  if(is_array($_SESSION["cart"])){
-    deleteCart($id);
-  }
+    $id = $_POST["pid"];
+    if (is_array($_SESSION["cart"])) {
+        deleteCart($id);
+    }
 }
 
 function deleteCart($id)
-  {
+{
     for ($i = 0; $i < count($_SESSION["cart"]); $i++) {
-      if ($_SESSION["cart"][$i]["product_id"] == $id) {
-        array_splice($_SESSION["cart"],$i,1);
-      }
+        if ($_SESSION["cart"][$i]["product_id"] == $id) {
+            array_splice($_SESSION["cart"], $i, 1);
+        }
     }
-  }
+}
 
-function addToCart($id){
-  $stmt = DB::getInstance()->prepare("SELECT * FROM Products WHERE product_id=$id");
-  $stmt->execute();
-  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-  foreach($stmt->fetchAll() as $v){
+function addToCart($id)
+{
+    $stmt = DB::getInstance()->prepare("SELECT * FROM Products WHERE product_id=$id");
+    $stmt->execute();
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    foreach ($stmt->fetchAll() as $v) {
         $var=$v;
         $var['quantity']=1;
-        array_push($_SESSION['cart'],$var);
+        array_push($_SESSION['cart'], $var);
         // echo "<pre>";
         // print_r($_SESSION["cart"]);
         // echo "</pre>";
     }
 }
-function ispresent($id){
-  foreach($_SESSION['cart'] as $key=>$val){
-      if($id==$val['product_id']){
-          $_SESSION['cart'][$key]['quantity']++;
-          return true;
-      }
-  }
-  return false;
-}
-if(isset($_POST["update"])){
-  $input=$_POST["input"];
-  $pid=$_POST["id"];
-  foreach($_SESSION['cart'] as $key=>$val){
-    if($pid==$val['product_id']){
-        $_SESSION['cart'][$key]['quantity']=$input;
+function ispresent($id)
+{
+    foreach ($_SESSION['cart'] as $key => $val) {
+        if ($id==$val['product_id']) {
+            $_SESSION['cart'][$key]['quantity']++;
+            return true;
+        }
     }
-  }
+    return false;
+}
+if (isset($_POST["update"])) {
+    $input=$_POST["input"];
+    $pid=$_POST["id"];
+    foreach ($_SESSION['cart'] as $key => $val) {
+        if ($pid==$val['product_id']) {
+            $_SESSION['cart'][$key]['quantity']=$input;
+        }
+    }
 }
 
 ?>
@@ -75,7 +76,9 @@ if(isset($_POST["update"])){
     
 
     <!-- Bootstrap core CSS -->
-<link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" 
+integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
+crossorigin="anonymous">
 
 
     <style>
@@ -110,10 +113,10 @@ if(isset($_POST["update"])){
         </h4>
         <table class="table">
         <?php
-			    $total = 0;
-			    $grand=0;
+          $total = 0;
+          $grand=0;
           $html="";
-			    if (!empty($_SESSION["cart"])) {
+        if (!empty($_SESSION["cart"])) {
             $html='
                   <thead>
                   <tr>
@@ -124,7 +127,7 @@ if(isset($_POST["update"])){
                   <th>Delete</th>
                   </tr>
                   </thead>';
-                  foreach ($_SESSION["cart"] as $k => $v) {
+            foreach ($_SESSION["cart"] as $k => $v) {
                     $total=$v["sales_price"]*$v["quantity"];
                     $grand+=$total;
 
@@ -145,7 +148,7 @@ if(isset($_POST["update"])){
                       </td>
                       <td>'.$total.'</td>
                       </tr>';
-                  }
+            }
                   $html.='<tfoot>
                   <tr>
                    <td colspan="5" class="text-end">Total:$'.$grand.'</td>
@@ -154,8 +157,8 @@ if(isset($_POST["update"])){
                   ';
                   $_SESSION['total']=$grand;
                   echo $html;
-                }
-          ?>
+        }
+            ?>
         </table>
       </div>
     </div>
@@ -184,7 +187,9 @@ if(isset($_POST["update"])){
 </div>
 
 
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+    crossorigin="anonymous"></script>
     <script src="./assets/js/form-validation.js"></script>
   </body>
 </html>

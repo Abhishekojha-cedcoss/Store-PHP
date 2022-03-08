@@ -1,4 +1,5 @@
 <?php
+namespace user;
 
 class User extends DB
 {
@@ -18,16 +19,21 @@ class User extends DB
     }
 
     public function addUser()
-    {   
-        try{
-        DB::getInstance()->exec("INSERT INTO Users(username,`password`,email,`Status`,firstName,lastname) VALUES('$this->username','$this->password','$this->email','pending','$this->firstname','$this->lastname');");
-        return "Wait for the admin to accept the request";
+    {
+        try {
+                DB::getInstance()->exec("INSERT INTO Users(username,`password`,email,`Status`,
+                firstName,lastname) 
+                VALUES('$this->username','$this->password','$this->email',
+                'pending','$this->firstname','$this->lastname');");
+                return "Wait for the admin to accept the request";
+        } catch (\Exception $e) {
+                return "You are already registered! Please Login";
+        }
     }
-    catch(Exception $e){
-        return "You are already registered! Please Login";
-    }
-    }
-    public function addUserByAdmin(){
-        DB::getInstance()->exec("INSERT INTO Users(username,`password`,email,`Status`,firstName,lastname,`role`) VALUES('$this->username','$this->password','$this->email','approved','$this->firstname','$this->lastname','user');");
+    public function addUserByAdmin()
+    {
+        DB::getInstance()->exec("INSERT INTO Users(username,`password`,email,`Status`,firstName,lastname,`role`) 
+        VALUES('$this->username','$this->password','$this->email','approved',
+        '$this->firstname','$this->lastname','user');");
     }
 }

@@ -3,38 +3,39 @@ session_start();
 include "config.php";
 include "classes/DB.php";
 
-$stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE Products.category_ID=Product_category.category_id");
+$stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+WHERE Products.category_ID=Product_category.category_id");
 $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
 if (isset($_POST["submit"])) {
-  $id1 = $_POST["del"];
-  $stmt2 = DB::getInstance()->prepare("DELETE FROM Products WHERE product_id=$id1");
-  $stmt2->execute();
+    $id1 = $_POST["del"];
+    $stmt2 = user\DB::getInstance()->prepare("DELETE FROM Products WHERE product_id=$id1");
+    $stmt2->execute();
 }
 
-if (isset($_POST["add"])){
-  $pid=$_POST["prodID"];
-  $pname=$_POST["pname"];
-  $pcat=$_POST["prodCat"];
-  $psale=$_POST["sale"];
-  $plist=$_POST["list"];
-  $stmt1 = DB::getInstance()->prepare("SELECT * FROM Product_category ");
-  $stmt1->execute();
-  $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
-foreach($stmt1->fetchAll() as $k=>$v){
-  if($v["category_name"]==$pcat){
-    $prodCatID=$v["category_id"];
+if (isset($_POST["add"])) {
+    $pid=$_POST["prodID"];
+    $pname=$_POST["pname"];
+    $pcat=$_POST["prodCat"];
+    $psale=$_POST["sale"];
+    $plist=$_POST["list"];
+    $stmt1 = user\DB::getInstance()->prepare("SELECT * FROM Product_category ");
+    $stmt1->execute();
+    $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
+    foreach ($stmt1->fetchAll() as $k => $v) {
+        if ($v["category_name"]== $pcat) {
+            $prodCatID=$v["category_id"];
+        }
     }
-  }
-  try{
-    $stmt2 = DB::getInstance()->prepare("INSERT INTO Products VALUES($pid,'$pname', $prodCatID ,'$psale','$plist')");
-    $stmt2->execute();
-    header("location products.php");
-  }
-  catch(Exception $e){
-    echo '<script>alert("Duplicate Products cannot be added! Please Try again!")</script>';
-  }
+    try {
+        $stmt2 = user\DB::getInstance()->prepare("INSERT INTO Products 
+        VALUES($pid,'$pname', $prodCatID ,'$psale','$plist')");
+        $stmt2->execute();
+        header("location products.php");
+    } catch (Exception $e) {
+        echo '<script>alert("Duplicate Products cannot be added! Please Try again!")</script>';
+    }
 }
 
 ?>
@@ -83,10 +84,13 @@ foreach($stmt1->fetchAll() as $k=>$v){
 
   <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler position-absolute d-md-none collapsed" 
+    type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" 
+    aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" 
+    aria-label="Search">
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
         <a class="nav-link px-3" href="signout.php">Sign out</a>
@@ -106,7 +110,7 @@ foreach($stmt1->fetchAll() as $k=>$v){
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">
+              <a class="nav-link" href="orderadmin.php">
                 <span data-feather="file"></span>
                 Orders
               </a>
@@ -117,12 +121,7 @@ foreach($stmt1->fetchAll() as $k=>$v){
                 Products
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="users"></span>
-                Customers
-              </a>
-            </li>
+
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <span data-feather="bar-chart-2"></span>
@@ -173,7 +172,8 @@ foreach($stmt1->fetchAll() as $k=>$v){
       </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center
+         pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Products</h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
@@ -207,7 +207,7 @@ foreach($stmt1->fetchAll() as $k=>$v){
 
         <br>
         <div class="table-responsive">
-          <?php
+        <?php
           $html = "";
           $html .= '<table class="table table-striped table-sm">     
         <tr>
@@ -219,7 +219,7 @@ foreach($stmt1->fetchAll() as $k=>$v){
           <th scope="col">action</th>
         </tr>
       ';
-          foreach ($stmt->fetchAll() as $k => $v) {
+        foreach ($stmt->fetchAll() as $k => $v) {
             $html .= '<tr>
     <td>' . $v["product_id"] . '</td>
     <td>' . $v["product_name"] . '</td>
@@ -238,30 +238,24 @@ foreach($stmt1->fetchAll() as $k=>$v){
     <button type="submit" class="btn btn-danger" name="submit"> Delete</button></form>
     </td>
     </tr>';
-          }
+        }
           $html .= '</table>';
           echo $html;
 
-          ?>
+            ?>
 
           </tbody>
           </table>
-          <!-- <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-          </nav> -->
+
         </div>
       </main>
     </div>
   </div>
 
 
-  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js" 
+  integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+  crossorigin="anonymous"></script>
 </body>
 
 </html>

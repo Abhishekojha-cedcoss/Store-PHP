@@ -5,14 +5,14 @@ include "classes/User.php";
 include "classes/signup.php";
 error_reporting(0);
 $email=$username=$firstname=$lastname=$password="";
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
     $email=$_POST["email"];
     $username=$_POST["username"];
     $firstname=$_POST["firstname"];
     $lastname=$_POST["lastname"];
     $password=$_POST["password"];
-    $user= new User($username,$firstname,$lastname,$password,$email);
-    $user->addUserByAdmin();  
+    $user= new user\User($username, $firstname, $lastname, $password, $email);
+    $user->addUserByAdmin();
     header("location: dashboard.php");
 }
 ?>
@@ -63,17 +63,20 @@ if(isset($_POST['submit'])){
     </div>
 
     <div class="form-floating">
-        <input type="text" required class="form-control" id="floatingInput" name="username" placeholder="Enter username">
+        <input type="text" required class="form-control" id="floatingInput" 
+        name="username" placeholder="Enter username">
         <label for="floatingInput">Username</label>
     </div>
 
     <div class="form-floating">
-        <input type="text" required class="form-control" id="floatingInput" name="firstname" placeholder="Enter first name">
+        <input type="text" required class="form-control" id="floatingInput" 
+        name="firstname" placeholder="Enter first name">
         <label for="floatingInput">First name</label>
       </div>
 
     <div class="form-floating">
-        <input type="text" required class="form-control" id="floatingInput" name="lastname" placeholder="Enter last name">
+        <input type="text" required class="form-control" id="floatingInput" 
+        name="lastname" placeholder="Enter last name">
         <label for="floatingInput">Last name</label>
     </div>
 

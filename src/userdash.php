@@ -2,24 +2,31 @@
 session_start();
 include "config.php";
 include "classes/DB.php";
-
+if (isset($_SESSION["cart"])) {
+    // header("location: ustore/checkout.php");
+}
+if (!isset($_SESSION["user"])) {
+    header("location: ../login.php");
+}
 $email=$_SESSION["user"]["email"];
 $password=$_SESSION["user"]["password"];
-$stmt = DB::getInstance()->prepare("SELECT * FROM Users WHERE email='$email'");
+$stmt = user\DB::getInstance()->prepare("SELECT * FROM Users WHERE email='$email'");
 $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-foreach($stmt->fetchAll() as $k=>$v){
-  $fname=$v["firstName"];
-  $lname=$v["lastname"];
-  $uid=$v["user_id"];
-  $username=$v["username"];
+foreach ($stmt->fetchAll() as $k => $v) {
+    $fname=$v["firstName"];
+    $lname=$v["lastname"];
+    $uid=$v["user_id"];
+    $username=$v["username"];
 }
-if(isset($_POST["submit"])){
-  $fname=$_POST["fname"];
-  $lname=$_POST["lname"];
-  $password=$_POST["password"];
-  $stmt = DB::getInstance()->prepare("UPDATE Users SET `password`='$password',firstName='$fname',lastname='$lname' WHERE email='$email'");
-  $stmt->execute();
+if (isset($_POST["submit"])) {
+    $fname=$_POST["fname"];
+    $lname=$_POST["lname"];
+    $password=$_POST["password"];
+    $stmt = user\DB::getInstance()->prepare("UPDATE Users 
+    SET `password`='$password',firstName='$fname',lastname='$lname' 
+    WHERE email='$email'");
+    $stmt->execute();
 }
 
 ?>
@@ -39,7 +46,8 @@ if(isset($_POST["submit"])){
     
 
     <!-- Bootstrap core CSS -->
-    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" 
+    crossorigin="anonymous">
 
 
     <style>
@@ -66,7 +74,9 @@ if(isset($_POST["submit"])){
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler position-absolute d-md-none collapsed" 
+  type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" 
+  aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
@@ -82,9 +92,27 @@ if(isset($_POST["submit"])){
         <div class="position-sticky pt-3">
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="dashboard.html">
+              <a class="nav-link active" aria-current="page" href="userdash.php">
                 <span data-feather="home"></span>
                 My Profile
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="ustore/home.php">
+                shop
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="orders.php">
+                <span data-feather="home"></span>
+                My Orders
+              </a>
+            </li>
+            <hr>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="ustore/checkout.php">
+                <span data-feather="home"></span>
+                Checkout
               </a>
             </li>
             </ul>
@@ -92,7 +120,8 @@ if(isset($_POST["submit"])){
             </nav>
             </div>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center 
+                pt-3 pb-2 mb-3 border-bottom">
                   <h1 class="h2">My Profile</h1>
                   <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
@@ -127,7 +156,8 @@ if(isset($_POST["submit"])){
                   <input type="text" name="password" value="<?php echo $password; ?>" id="password">
                 </label><br><br>
                 <button type="button" class="btn btn-primary" id="Edit">Edit Profile</button>
-                <button type="submit" class="btn btn-primary" id="Update" style="display:none" name="submit">Update Profile</button>
+                <button type="submit" class="btn btn-primary" id="Update" 
+                style="display:none" name="submit">Update Profile</button>
                 </form>
 
               </div>
