@@ -5,9 +5,22 @@ include "classes/DB.php";
 if (!isset($_SESSION["user"])) {
     header("location: login.php");
 }
-$stmt = user\DB::getInstance()->prepare("SELECT * FROM Users WHERE NOT role='admin'");
-$stmt->execute();
-$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+if (isset($_GET['pageno'])) {
+    $pageno = $_GET['pageno'];
+} else {
+    $pageno = 1;
+}
+$no_of_records_per_page = 4;
+$offset = ($pageno-1) * $no_of_records_per_page;
+$stmt5 = user\DB::getInstance()->prepare("SELECT COUNT(*) FROM Users");
+$stmt5->execute();
+$result = $stmt5->setFetchMode(PDO::FETCH_ASSOC);
+foreach ($stmt5->fetchAll()[0] as $k => $v) {
+    $total_rows = $v[0];
+}
+$total_pages = ceil($total_rows / $no_of_records_per_page);
+$stm = user\DB::getInstance()->prepare("SELECT * FROM Users LIMIT $offset, $no_of_records_per_page");
+$stm->execute();
 
 if (isset($_POST["submit"])) {
     $id = $_POST["id"];
@@ -148,6 +161,7 @@ if (isset($_POST["submit1"])) {
         <h2>Section title</h2>
         <div class="table-responsive">
             <?php
+            
             $html = "";
             $html .= '<table class="table table-striped table-sm">     
         <tr>
@@ -160,7 +174,7 @@ if (isset($_POST["submit1"])) {
         </tr>
       
       ';
-            foreach ($stmt->fetchAll() as $k => $v) {
+            foreach ($stm->fetchAll() as $k => $v) {
                 $html .= '<tr>
         <td>' . $v["user_id"] . '</td>
         <td>' . $v["username"] . '</td>
@@ -177,7 +191,48 @@ if (isset($_POST["submit1"])) {
             }
             $html .= '</table>';
             echo $html;
+
             ?>
+         <div class="row text-center">
+            <nav aria-label="Page navigation example">
+            <ul class="pagination">
+            <div class="btn-group" role="group" aria-label="Basic example">
+            <li class="<?php if ($pageno <= 1) {
+                    echo 'disabled';
+} ?>">
+                    <a href="<?php if ($pageno <= 1) {
+                        echo '#';
+} else {
+    echo "?pageno=".($pageno - 1);
+} ?>" class="btn btn-secondary">Prev</a>
+                </li>
+
+<?php
+for ($page=1; $page <= $total_pages; $page++) :
+            ?>
+
+              <li><a href='<?php echo "?pageno=$page"; ?>' class="btn btn-secondary">
+                <?php  echo $page; ?>
+               </a></li>
+
+                <?php
+endfor ;
+                ?>
+              <li class="<?php if ($pageno >= $total_pages) {
+                    echo 'disabled';
+} ?>">
+                    <a href="<?php if ($pageno >= $total_pages) {
+                        echo '#';
+} else {
+    echo "dashboard.php?pageno=".($pageno + 1);
+} ?>" class="btn btn-secondary">Next</a>
+                </li>
+                    </ul>
+              </nav>
+          </div>
+          </div>
+                <br>
+                <br>
           <form action="addNewUser.php" method="POST">
             <button class="btn btn-info" type="submit">Add New User</button>
           </form>
