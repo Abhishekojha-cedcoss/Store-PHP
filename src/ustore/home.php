@@ -154,58 +154,126 @@ if (!isset($_POST["search"])) {
             </div>
           </form>
       </div>
-    <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <!-- <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> -->
         
                     <?php
-                                    $html="";
-                    foreach ($stmt->fetchAll() as $k => $v) {
-                        $html.='
-            <div class="col">
-            <div class="card shadow-sm">
-            <img src="../images/'.$v["image"].'" alt="">
+      //                               $html="";
+      //               foreach ($stmt->fetchAll() as $k => $v) {
+      //                   $html.='
+      //       <div class="col">
+      //       <div class="card shadow-sm">
+      //       <img src="../images/'.$v["image"].'" alt="">
 
-            <div class="card-body">
-            <h5>'.$v["product_name"].'</h5>
-            <p class="card-text">'.$v["category_name"].'</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <p><strong>$'.$v["sales_price"].'</strong>&nbsp;<del><small 
-              class="link-danger">$'.$v["list_price"].'</small></del></p>
-              <form action="single-product.php" method="POST">
-              <input type="hidden" name="id" value="'.$v["product_id"].'">
-              <input class="btn btn-success" type="submit" name="submit" value="View Details">
-              </form>
-              <form action="cart.php" method="POST">
-              <input type="hidden" name="id" value="'.$v["product_id"].'">
-              <input class="btn btn-primary" type="submit" name="add-to-cart" value="Add To Cart">
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>';
-                    }
-                    echo $html;
+      //       <div class="card-body">
+      //       <h5>'.$v["product_name"].'</h5>
+      //       <p class="card-text">'.$v["category_name"].'</p>
+      //       <div class="d-flex justify-content-between align-items-center">
+      //         <p><strong>$'.$v["sales_price"].'</strong>&nbsp;<del><small
+      //         class="link-danger">$'.$v["list_price"].'</small></del></p>
+      //         <form action="single-product.php" method="POST">
+      //         <input type="hidden" name="id" value="'.$v["product_id"].'">
+      //         <input class="btn btn-success" type="submit" name="submit" value="View Details">
+      //         </form>
+      //         <form action="cart.php" method="POST">
+      //         <input type="hidden" name="id" value="'.$v["product_id"].'">
+      //         <input class="btn btn-primary" type="submit" name="add-to-cart" value="Add To Cart">
+      //         </form>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>';
+      //               }
+      //               echo $html;
           
                     ?>
              
+            <?php
+
+            if (isset($_GET['pageno'])) {
+                $pageno = $_GET['pageno'];
+            } else {
+                $pageno = 1;
+            }
+            $no_of_records_per_page = 2;
+            $offset = ($pageno-1) * $no_of_records_per_page;
+            $stmt = user\DB::getInstance()->prepare("SELECT COUNT(*) FROM Products");
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            foreach ($stmt->fetchAll()[0] as $k => $v) {
+                $total_rows = $v[0];
+            }
+            $total_pages = ceil($total_rows / $no_of_records_per_page);
+            $stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
+            Products.category_ID=Product_category.category_id LIMIT $offset, $no_of_records_per_page");
+            $stm->execute();
+                ?>
+              <div class="container">
+              <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                  
+                            <?php
+                                            $html="";
+                            foreach ($stm->fetchAll() as $k => $v) {
+                                $html.='
+                    <div class="col">
+                    <div class="card shadow-sm">
+                    <img src="../images/'.$v["image"].'" alt="">
+        
+                    <div class="card-body">
+                    <h5>'.$v["product_name"].'</h5>
+                    <p class="card-text">'.$v["category_name"].'</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <p><strong>$'.$v["sales_price"].'</strong>&nbsp;<del><small 
+                      class="link-danger">$'.$v["list_price"].'</small></del></p>
+                      <form action="single-product.php" method="POST">
+                      <input type="hidden" name="id" value="'.$v["product_id"].'">
+                      <input class="btn btn-success" type="submit" name="submit" value="View Details">
+                      </form>
+                      <form action="cart.php" method="POST">
+                      <input type="hidden" name="id" value="'.$v["product_id"].'">
+                      <input class="btn btn-primary" type="submit" name="add-to-cart" value="Add To Cart">
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>';
+                            }
+                            echo $html;
+                  
+                            ?>
           </div>
-          <div class="row align-items-center">
-          <div class="col">
+            
+          <br>
+          <div class="row text-center">
             <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                </ul>
+            <ul class="pagination">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <li><a href="?pageno=1" class="btn btn-secondary">First</a></li>
+                <li class="<?php if ($pageno <= 1) {
+                    echo 'disabled';
+} ?>">
+                    <a href="<?php if ($pageno <= 1) {
+                        echo '#';
+} else {
+    echo "?pageno=".($pageno - 1);
+} ?>" class="btn btn-secondary">Prev</a>
+                </li>
+                <li class="<?php if ($pageno >= $total_pages) {
+                    echo 'disabled';
+} ?>">
+                    <a href="<?php if ($pageno >= $total_pages) {
+                        echo '#';
+} else {
+    echo "?pageno=".($pageno + 1);
+} ?>" class="btn btn-secondary">Next</a>
+                </li>
+                <li><a href="?pageno=<?php echo $total_pages; ?>" class="btn btn-secondary">Last</a></li>
+    </ul>
               </nav>
           </div>
           </div>
-     
-    </div>
-  </div>
-
+</div>
+</div>
 </main>
 
 <footer class="text-muted py-5">
