@@ -81,7 +81,11 @@ if (!isset($_POST["search"])) {
       <div class="row">
         <div class="col-sm-8 col-md-7 py-4">
           <h4 class="text-white">Cart</h4>
-          <p class="text-muted">Cart has <?php echo count($_SESSION["cart"]); ?> items</p>
+          <p class="text-muted">Cart has <?php if (isset($_SESSION["cart"])) {
+                echo count($_SESSION["cart"]);
+} else {
+            echo "0";
+} ?> items</p>
         </div>
         <div class="col-sm-4 offset-md-1 py-4">
           <h4 class="text-white">Contact</h4>
