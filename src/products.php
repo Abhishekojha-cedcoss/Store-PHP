@@ -37,6 +37,14 @@ if (isset($_POST["add"])) {
         echo '<script>alert("Duplicate Products cannot be added! Please Try again!")</script>';
     }
 }
+if (isset($_POST["search"])) {
+    $id=$_POST["value"];
+    $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+    WHERE Products.category_ID=Product_category.category_id AND (product_id LIKE '$id%'
+    OR product_name LIKE '$id%')");
+    $stmt->execute();
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+}
 
 ?>
 
@@ -187,23 +195,22 @@ if (isset($_POST["add"])) {
           </div>
         </div>
 
-        <form class="row row-cols-lg-auto g-3 align-items-center">
+        <form class="row row-cols-lg-auto g-3 align-items-center" action="" method="POST">
           <div class="col-12">
             <label class="visually-hidden" for="inlineFormInputGroupUsername">Search</label>
             <div class="input-group">
-              <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Enter id,name...">
+              <input type="text" class="form-control" name="value" 
+              id="inlineFormInputGroupUsername" placeholder="Enter id,name...">
             </div>
           </div>
 
 
 
           <div class="col-12">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary" name="search">Search</button>
           </div>
-          <div class="col-12">
-            <a class="btn btn-success" href="add-product.php">Add Product</a>
-          </div>
-        </form>
+          </form>
+
 
         <br>
         <div class="table-responsive">
@@ -246,7 +253,9 @@ if (isset($_POST["add"])) {
 
           </tbody>
           </table>
-
+          <div class="col-12">
+            <a class="btn btn-success" href="add-product.php">Add Product</a>
+          </div>
         </div>
       </main>
     </div>
