@@ -83,7 +83,7 @@ include "classes/DB.php";
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="products.php">
               <span data-feather="users"></span>
               Customers
             </a>
