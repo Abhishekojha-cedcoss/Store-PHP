@@ -5,7 +5,7 @@ include "../classes/DB.php";
 
 if (isset($_POST["submit"])) {
     $id=$_POST["id"];
-    $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+    $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
     WHERE Products.category_ID=Product_category.category_id AND Products.product_id='$id'");
     $stmt->execute();
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);

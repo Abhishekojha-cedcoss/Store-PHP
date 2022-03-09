@@ -31,7 +31,7 @@ function deleteCart($id)
 
 function addToCart($id)
 {
-    $stmt = DB::getInstance()->prepare("SELECT * FROM Products WHERE product_id=$id");
+    $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products WHERE product_id=$id");
     $stmt->execute();
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     foreach ($stmt->fetchAll() as $v) {

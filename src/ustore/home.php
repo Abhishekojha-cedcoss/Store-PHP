@@ -5,7 +5,7 @@ include "../classes/DB.php";
 session_start();
 
 if (!isset($_POST["search"])) {
-    $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
+    $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
     Products.category_ID=Product_category.category_id");
     $stmt->execute();
     $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -13,7 +13,7 @@ if (!isset($_POST["search"])) {
     $input=$_POST["input"];
     $sel=$_POST["select"];
     if (!empty($input)&& !empty($sel)) {
-        $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
         WHERE Products.category_ID=Product_category.category_id 
         AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE 
         '$input%' OR  Product_category.category_name LIKE '$input%')
@@ -21,19 +21,19 @@ if (!isset($_POST["search"])) {
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     } elseif (empty($input) && !empty($sel)) {
-        $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
         WHERE Products.category_ID=Product_category.category_id ORDER BY $sel");
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     } elseif (empty($sel) && !empty($input)) {
-          $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+          $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
           WHERE Products.category_ID=Product_category.category_id 
           AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE 
           '$input%' OR  Product_category.category_name LIKE '$input%')");
           $stmt->execute();
           $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     } else {
-        $stmt = DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
         WHERE Products.category_ID=Product_category.category_id");
         $stmt->execute();
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
