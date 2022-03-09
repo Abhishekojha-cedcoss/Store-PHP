@@ -158,39 +158,6 @@ if (!isset($_POST["search"])) {
             </div>
           </form>
       </div>
-    <!-- <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> -->
-        
-                    <?php
-      //                               $html="";
-      //               foreach ($stmt->fetchAll() as $k => $v) {
-      //                   $html.='
-      //       <div class="col">
-      //       <div class="card shadow-sm">
-      //       <img src="../images/'.$v["image"].'" alt="">
-
-      //       <div class="card-body">
-      //       <h5>'.$v["product_name"].'</h5>
-      //       <p class="card-text">'.$v["category_name"].'</p>
-      //       <div class="d-flex justify-content-between align-items-center">
-      //         <p><strong>$'.$v["sales_price"].'</strong>&nbsp;<del><small
-      //         class="link-danger">$'.$v["list_price"].'</small></del></p>
-      //         <form action="single-product.php" method="POST">
-      //         <input type="hidden" name="id" value="'.$v["product_id"].'">
-      //         <input class="btn btn-success" type="submit" name="submit" value="View Details">
-      //         </form>
-      //         <form action="cart.php" method="POST">
-      //         <input type="hidden" name="id" value="'.$v["product_id"].'">
-      //         <input class="btn btn-primary" type="submit" name="add-to-cart" value="Add To Cart">
-      //         </form>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>';
-      //               }
-      //               echo $html;
-          
-                    ?>
              
             <?php
 
