@@ -188,9 +188,9 @@ if (isset($_POST["submit1"])) {
             <nav aria-label="Page navigation example">
             <ul class="pagination">
             <div class="btn-group" role="group" aria-label="Basic example">
-            <li class="<?php if ($pageno <= 1) {
-                    echo 'disabled';
-} ?>">
+            <li <?php if ($pageno <= 1) {
+                    echo 'hidden';
+} ?>>
                     <a href="<?php if ($pageno <= 1) {
                         echo '#';
 } else {
@@ -209,9 +209,9 @@ for ($page=1; $page <= $total_pages; $page++) :
                 <?php
 endfor ;
                 ?>
-              <li class="<?php if ($pageno >= $total_pages) {
-                    echo 'disabled';
-} ?>">
+              <li <?php if ($pageno >= $total_pages) {
+                    echo 'hidden';
+} ?>>
                     <a href="<?php if ($pageno >= $total_pages) {
                         echo '#';
 } else {

@@ -2,7 +2,7 @@
 include "config.php";
 include "classes/DB.php";
 include "classes/User.php";
-include "classes/signup.php";
+
 error_reporting(0);
 $email=$username=$firstname=$lastname=$password="";
 if (isset($_POST['submit'])) {
