@@ -12,14 +12,15 @@ if (isset($_GET['pageno'])) {
 }
 $no_of_records_per_page = 4;
 $offset = ($pageno-1) * $no_of_records_per_page;
-$stmt5 = user\DB::getInstance()->prepare("SELECT COUNT(*) FROM Users");
+$stmt5 = user\DB::getInstance()->prepare("SELECT COUNT(*) FROM Users WHERE NOT role='admin'");
 $stmt5->execute();
 $result = $stmt5->setFetchMode(PDO::FETCH_ASSOC);
 foreach ($stmt5->fetchAll()[0] as $k => $v) {
     $total_rows = $v[0];
 }
 $total_pages = ceil($total_rows / $no_of_records_per_page);
-$stm = user\DB::getInstance()->prepare("SELECT * FROM Users LIMIT $offset, $no_of_records_per_page");
+$stm = user\DB::getInstance()->prepare("SELECT * FROM Users WHERE NOT role='admin' LIMIT $offset, 
+$no_of_records_per_page");
 $stm->execute();
 
 if (isset($_POST["submit"])) {
@@ -146,16 +147,6 @@ if (isset($_POST["submit1"])) {
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center 
         pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Dashboard</h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-              <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-              <span data-feather="calendar"></span>
-              This week
-            </button>
-          </div>
         </div>
 
         <h2>Section title</h2>
