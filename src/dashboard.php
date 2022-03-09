@@ -17,10 +17,12 @@ if (isset($_POST["submit"])) {
         if ($v["Status"] == "pending") {
             $stmt1 = user\DB::getInstance()->prepare("UPDATE Users SET Status='approved' WHERE user_id='$id'");
             $stmt1->execute();
+            header("location: dashboard.php");
         }
         if ($v["Status"] == "approved") {
             $stmt1 = user\DB::getInstance()->prepare("UPDATE Users SET Status='pending' WHERE user_id='$id'");
             $stmt1->execute();
+            header("location: dashboard.php");
         }
     }
 }

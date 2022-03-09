@@ -7,8 +7,14 @@ $stmt->execute();
 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 if (isset($_POST["submit1"])) {
     $id=$_POST["orderid"];
-    $stmt1 = user\DB::getInstance()->prepare("UPDATE Orders SET status='In transist' WHERE user_id=$id");
+    $stmt1 = user\DB::getInstance()->prepare("UPDATE Orders SET status= 
+    CASE WHEN status='pending' THEN 'In transist' 
+         WHEN status='In transist' THEN 'Delivered'
+         WHEN status='Delivered' THEN 'In transist'
+    END
+    WHERE order_id=$id");
     $stmt1->execute();
+    header("location: orderadmin.php");
 }
 ?>
 <!doctype html>
