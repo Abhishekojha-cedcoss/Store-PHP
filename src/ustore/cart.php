@@ -109,7 +109,9 @@ crossorigin="anonymous">
       <div class="col order-md-last">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary">Your cart</span>
-          <span class="badge bg-primary rounded-pill"><?php echo count($_SESSION["cart"]); ?></span>
+          <span class="badge bg-primary rounded-pill"><?php if (!empty($_SESSION["cart"])) {
+                print_r(count($_SESSION["cart"]));
+}?></span>
         </h4>
         <table class="table">
         <?php

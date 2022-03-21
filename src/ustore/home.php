@@ -3,40 +3,52 @@
 include "../config.php";
 include "../classes/DB.php";
 session_start();
-
-if (!isset($_POST["search"])) {
-    $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
-    Products.category_ID=Product_category.category_id");
-    $stmt->execute();
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+if (isset($_GET['pageno'])) {
+  $pageno = $_GET['pageno'];
 } else {
+  $pageno = 1;
+}
+$no_of_records_per_page = 2;
+$offset = ($pageno-1) * $no_of_records_per_page;
+$stmt = user\DB::getInstance()->prepare("SELECT COUNT(*) FROM Products");
+$stmt->execute();
+$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+foreach ($stmt->fetchAll()[0] as $k => $v) {
+  $total_rows = $v[0];
+}
+$total_pages = ceil($total_rows / $no_of_records_per_page);
+$stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
+Products.category_ID=Product_category.category_id LIMIT $offset, $no_of_records_per_page");
+$stm->execute();
+
+if (isset($_POST["search"])) {
     $input=$_POST["input"];
     $sel=$_POST["select"];
     if (!empty($input)&& !empty($sel)) {
-        $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        $stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
         WHERE Products.category_ID=Product_category.category_id 
         AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE 
         '$input%' OR  Product_category.category_name LIKE '$input%')
     ORDER BY $sel");
-        $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stm->execute();
+        $result = $stm->setFetchMode(PDO::FETCH_ASSOC);
     } elseif (empty($input) && !empty($sel)) {
-        $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        $stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
         WHERE Products.category_ID=Product_category.category_id ORDER BY $sel");
-        $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stm->execute();
+        $result = $stm->setFetchMode(PDO::FETCH_ASSOC);
     } elseif (empty($sel) && !empty($input)) {
-          $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+          $stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
           WHERE Products.category_ID=Product_category.category_id 
           AND (Products.product_id LIKE '$input%' OR Products.product_name LIKE 
           '$input%' OR  Product_category.category_name LIKE '$input%')");
-          $stmt->execute();
-          $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+          $stm->execute();
+          $result = $stm->setFetchMode(PDO::FETCH_ASSOC);
     } else {
-        $stmt = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
+        $stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category 
         WHERE Products.category_ID=Product_category.category_id");
-        $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stm->execute();
+        $result = $stm->setFetchMode(PDO::FETCH_ASSOC);
     }
 
 }
@@ -165,23 +177,7 @@ if (!isset($_POST["search"])) {
              
             <?php
 
-            if (isset($_GET['pageno'])) {
-                $pageno = $_GET['pageno'];
-            } else {
-                $pageno = 1;
-            }
-            $no_of_records_per_page = 2;
-            $offset = ($pageno-1) * $no_of_records_per_page;
-            $stmt = user\DB::getInstance()->prepare("SELECT COUNT(*) FROM Products");
-            $stmt->execute();
-            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            foreach ($stmt->fetchAll()[0] as $k => $v) {
-                $total_rows = $v[0];
-            }
-            $total_pages = ceil($total_rows / $no_of_records_per_page);
-            $stm = user\DB::getInstance()->prepare("SELECT * FROM Products INNER JOIN Product_category WHERE 
-            Products.category_ID=Product_category.category_id LIMIT $offset, $no_of_records_per_page");
-            $stm->execute();
+
                 ?>
               <div class="container">
               <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
