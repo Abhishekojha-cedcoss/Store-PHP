@@ -10,7 +10,7 @@ if (isset($_POST['submit'])) {
     $firstname=$_POST["firstname"];
     $lastname=$_POST["lastname"];
     $password=$_POST["password"];
-    $user= new user\User($username, $firstname, $lastname, $password, $email);
+    $user= new user\User($username, $firstname, $lastname, $password, $email, "user");
     $user->addUserByAdmin();
     header("location: dashboard.php");
 }

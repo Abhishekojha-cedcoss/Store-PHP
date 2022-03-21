@@ -161,7 +161,8 @@ if (isset($_POST["submit1"])) {
           <th scope="col">Firstname</th>
           <th scope="col">Lastname</th>
           <th scope="col">status</th>
-          <th scope="col">Action</th>
+          <th scope="col">Change Status</th>
+          <th scope="col">Delete</th>
         </tr>
       
       ';
@@ -171,13 +172,14 @@ if (isset($_POST["submit1"])) {
         <td>' . $v["username"] . '</td>
         <td>' . $v["firstName"] . '</td>
         <td>' . $v["lastname"] . '</td>
-        <td>' . $v["Status"] . '<form action="" method="POST"><input type="hidden"
-         name="id" value="' . $v["user_id"] . '"><button type="submit" name="submit"
-          class="submit" style="display:none">Change</button></form></td>
-        <td><a href="#" class="userEdit">Edit </a>
-        <form action="" method="POST">
+        <td>' . $v["Status"] . '</td>
+        <td><form action="" method="POST">
+        <input type="hidden" name="id" value="' . $v["user_id"] . '">
+        <button type="submit" name="submit" class="userEdit btn btn-info">Edit</button>
+        </form></td>
+        <td><form action="" method="POST">
         <input type="hidden" name="del" value="' . $v["user_id"] . '">
-        <button type="submit" name="submit1"> Delete</button></form></td>
+        <button type="submit" class="btn btn-danger" name="submit1"> Delete</button></form></td>
         </tr>';
             }
             $html .= '</table>';
@@ -236,6 +238,7 @@ endfor ;
   integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
   crossorigin="anonymous"></script>
   <script src="adminscript.js"> </script>
+
 </body>
 
 </html>

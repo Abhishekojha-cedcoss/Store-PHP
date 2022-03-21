@@ -115,10 +115,7 @@ include "classes/DB.php";
       </div>
 
       <form class="row g-3" action="products.php" method="POST">
-        <div class="col-md-6">
-          <label for="prodID" class="form-label">Product_ID</label>
-          <input type="text" class="form-control" id="prodID" name="prodID" required>
-        </div>
+
         <div class="col-md-6">
           <label for="pname" class="form-label">Product Name</label>
           <input type="text" class="form-control" id="pname" name="pname" required>
@@ -132,6 +129,10 @@ include "classes/DB.php";
           <input type="text" class="form-control" id="list" name="list" required>
         </div>
 
+        <div class="col-md-6">
+          <label for="img" class="form-label">Image</label>
+          <input type="text" class="form-control" id="img" name="img" required>
+        </div>
 
         <div class="col-md-4">
           <label for="prodCat" class="form-label">Product Category</label>

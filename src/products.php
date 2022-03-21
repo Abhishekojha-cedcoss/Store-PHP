@@ -15,11 +15,11 @@ if (isset($_POST["submit"])) {
 }
 
 if (isset($_POST["add"])) {
-    $pid=$_POST["prodID"];
     $pname=$_POST["pname"];
     $pcat=$_POST["prodCat"];
     $psale=$_POST["sale"];
     $plist=$_POST["list"];
+    $img=$_POST["img"];
     $stmt1 = user\DB::getInstance()->prepare("SELECT * FROM Product_category ");
     $stmt1->execute();
     $result = $stmt1->setFetchMode(PDO::FETCH_ASSOC);
@@ -29,10 +29,11 @@ if (isset($_POST["add"])) {
         }
     }
     try {
-        $stmt2 = user\DB::getInstance()->prepare("INSERT INTO Products 
-        VALUES($pid,'$pname', $prodCatID ,'$psale','$plist')");
+        $stmt2 = user\DB::getInstance()->prepare("INSERT INTO 
+        Products (`product_name`, `category_ID`, `sales_price`, `list_price`, `image`)
+        VALUES('$pname', $prodCatID ,'$psale','$plist','$img')");
         $stmt2->execute();
-        header("location products.php");
+        header("location: products.php");
     } catch (Exception $e) {
         echo '<script>alert("Duplicate Products cannot be added! Please Try again!")</script>';
     }
