@@ -92,7 +92,11 @@ if (!isset($_POST["search"])) {
           <ul class="list-unstyled">
             <li><a href="#" class="text-white">Follow on Twitter</a></li>
             <li><a href="#" class="text-white">Like on Facebook</a></li>
-            <li><a href="#" class="text-white">Email me</a></li>
+            <li><a href='<?php if ($_SESSION["user"]["role"] == "user") {
+                echo "../userdash.php";
+} else {
+              echo "../dashboard";
+}?>' class="text-white">My Profile</a></li>
           </ul>
         </div>
       </div>
