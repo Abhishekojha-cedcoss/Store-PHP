@@ -12,7 +12,7 @@ if (isset($_POST['submit'])) {
     $lastname=$_POST["lastname"];
     $password=$_POST["password"];
 
-    $user= new user\User($username, $firstname, $lastname, $password, $email);
+    $user= new user\User($username, $firstname, $lastname, $password, $email, "user");
     $error=$user->addUser();
     
 }
